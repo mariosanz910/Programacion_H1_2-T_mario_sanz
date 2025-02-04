@@ -3,29 +3,30 @@ require_once "../controlador/UsuariosController.php";
 $controller = new UsuariosController();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $plan_base = $_POST["plan_base"];
-    $duracion_suscripcion = $_POST["duracion_suscripcion"];
-    $id_usuario = $_POST["id_usuario"]; // Obtener el ID del usuario
+    $id_usuario = $_POST["id_usuario"] ?? null;  // Obtener ID desde el formulario correctamente
+    $plan_base = $_POST["plan_base"] ?? null;
+    $duracion_suscripcion = $_POST["duracion_suscripcion"] ?? null;
+
+    if (!$id_usuario || !$plan_base || !$duracion_suscripcion) {
+        die("Error: Faltan datos en el formulario.");
+    }
 
     // Llamar al método para registrar la segunda parte
     $controller->agregarusuario2($plan_base, $duracion_suscripcion, $id_usuario);
 
     // Redirección según el plan y la duración de la suscripción
-    if ($plan_base === "Basico" && $duracion_suscripcion === "Mensual") { // No en uso
-        header("Location: alta_usuario_nodeporte.php?id_usuario=" . urlencode($id_usuario));
-    } elseif ($plan_base === "Basico" && $duracion_suscripcion === "Anual") { // No en uso
-        header("Location: alta_usuario3.php?id_usuario=" . urlencode($id_usuario));
-    } elseif ($plan_base === "Premium" && $duracion_suscripcion === "Mensual") {
+    if ($plan_base === "Premium" && $duracion_suscripcion === "Mensual") {
         header("Location: alta_usuario_premium_mensual.php?id_usuario=" . urlencode($id_usuario));
     } elseif ($plan_base === "Premium" && $duracion_suscripcion === "Anual") {
         header("Location: alta_usuario_premium_anual.php?id_usuario=" . urlencode($id_usuario));
-    }elseif ($plan_base === "Estandar" && $duracion_suscripcion === "Mensual") {
+    } elseif ($plan_base === "Estandar" && $duracion_suscripcion === "Mensual") {
         header("Location: alta_usuario_nodeporte.php?id_usuario=" . urlencode($id_usuario));
     } elseif ($plan_base === "Estandar" && $duracion_suscripcion === "Anual") {
         header("Location: alta_usuario3.php?id_usuario=" . urlencode($id_usuario));
     }
     exit();
 }
+
 ?>
 
 <!-- Formulario de segunda parte del usuario (plan_base y duracion_suscripcion) -->
@@ -45,12 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="card-body">
             <form method="POST">
-                <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($_GET["id_usuario"] ?? ""); ?>">
+                <!-- ID de usuario oculto, asegurándonos de que se pasa correctamente -->
+                <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($_GET['id_usuario'] ?? ''); ?>">
 
                 <div class="mb-3">
                     <label for="plan_base" class="form-label">Plan Base</label>
                     <select class="form-control" id="plan_base" name="plan_base" required>
-                        <!--<option value="Basico">Básico</option>-->
                         <option value="Estandar">Estándar</option>
                         <option value="Premium">Premium</option>
                     </select>

@@ -13,8 +13,8 @@ class UsuariosController {
     }
 
     // Función para agregar el resto de datos del usuario
-    public function agregarusuario2($plan_base, $duracion_suscripcion) {
-        $this->Usuario->agregarusuario2($plan_base, $duracion_suscripcion);
+    public function agregarusuario2($plan_base, $duracion_suscripcion, $id_usuario) {
+        $this->Usuario->agregarusuario2($plan_base, $duracion_suscripcion, $id_usuario);
     }
 
     // Función para agregar el resto de datos del usuario

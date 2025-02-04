@@ -18,7 +18,7 @@ class usuario {
         $stmt->fetch();
         $stmt->close();
     
-        return $nombre_paquete ?? ''; // Si no tiene paquete, devuelve una cadena vacía
+        return $nombre_paquete ?? ''; 
     }
     
 
@@ -54,19 +54,24 @@ class usuario {
         //************************************************************************** */
 
     // Función para agregar la segunda parte del usuario:
-    public function agregarusuario2($plan_base, $duracion_suscripcion) {
-        $query = "INSERT INTO usuarios (plan_base, duracion_suscripcion) VALUES (?, ?)";
-        $sentencia = $this->conexion->conexion->prepare($query);
-        $sentencia->bind_param("ss", $plan_base, $duracion_suscripcion);
-
-        if ($sentencia->execute()) {
-            echo "usuario agregado con éxito.";
-        } else {
-            echo "Error al agregar usuario: " . $sentencia->error;
+    public function agregarusuario2($plan_base, $duracion_suscripcion, $id_usuario) {
+        // Verificar que la conexión está establecida
+        if (!$this->conexion || !$this->conexion->conexion) {
+            die("Error: No hay conexión a la base de datos.");
         }
+    
+        $query = "UPDATE usuarios SET plan_base = ?, duracion_suscripcion = ? WHERE id_usuario = ?";
+        $sentencia = $this->conexion->conexion->prepare($query);
+    
+        $sentencia->bind_param("ssi", $plan_base, $duracion_suscripcion, $id_usuario);
 
+            if (!$sentencia->execute()) {
+            die("Error al ejecutar la consulta: " . $sentencia->error);
+        }
+    
         $sentencia->close();
     }
+    
     //************************************************************************** */
 
     // Función para agregar la tercera parte del usuario:
