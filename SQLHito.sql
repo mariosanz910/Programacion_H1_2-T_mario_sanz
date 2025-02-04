@@ -8,8 +8,8 @@ CREATE TABLE usuarios (
     apellidos VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
     edad INT NOT NULL CHECK (edad >= 0) DEFAULT "18", 
-    plan_base ENUM("Basico", "Estandar", "Premium") DEFAULT "Basico", 
-    duracion_suscripcion ENUM("Mensual", "Anual") DEFAULT "Mensual"
+    plan_base ENUM("Basico", "Estandar", "Premium") NOT NULL, 
+    duracion_suscripcion ENUM("Mensual", "Anual") NOT NULL
 );
 
 CREATE TABLE paquetes_adicionales (
@@ -32,3 +32,6 @@ VALUES
 SELECT u.id_usuario, u.nombre, u.apellidos, u.correo, u.edad, u.plan_base, u.duracion_suscripcion, p.nombre_paquete FROM usuarios u LEFT JOIN  paquetes_adicionales p ON u.id_usuario = p.id_usuario;
 
 Select * From usuarios;
+
+UPDATE usuarios SET plan_base = "Premium", duracion_suscripcion = "Anual" WHERE id_usuario = 99999999;
+
